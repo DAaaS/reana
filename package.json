@@ -1,24 +1,29 @@
 {
   "name": "reana",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "**Re**mote **Ana**lysis - the front end interface for accessing the Science and Technology Facilities Council's computational resources for remote analysis.",
+  "main": "gulpfile.js",
   "scripts": {
-    "build": "gulp",
-    "start": "gulp dev"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "angular2": "2.0.0-beta.2",
-    "traceur": "0.0.102",
-    "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.3",
-    "rxjs": "5.0.0-beta.0",
-    "zone.js": "0.5.10",
-    "reflect-metadata": "0.1.2",
-    "systemjs": "0.19.6"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DAaaS/reana.git"
   },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DAaaS/reana/issues"
+  },
+  "homepage": "https://github.com/DAaaS/reana#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-rename": "1.2.2",
-    "gulp-traceur": "0.17.2",
-    "gulp-webserver": "^0.9.1"
+    "gulp-sass": "^2.3.1",
+    "gulp-tsd": "^0.1.1",
+    "gulp-typescript": "^2.13.4"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "gulp-live-server": "0.0.29"
   }
 }
