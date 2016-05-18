@@ -1,6 +1,6 @@
 node_modules/
 .DS_Store
-app/server/*.js
-app/server/typings
-app/web/js
-app/web/css
+app/server/js
+app/server/ts/typings
+app/client/js
+app/client/css
