@@ -10,7 +10,6 @@ gulp.task('web_tsc', function(){
     module: 'commonjs',
     declarationFiles: false
   });
-
   return gulp.src('./app/web/ts/**/**.ts').pipe(ts(tsProject)).js.pipe(gulp.dest('./app/web/js'));
 });
 

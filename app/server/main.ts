@@ -3,7 +3,7 @@ import * as express from "express";
 
 var app = express();
 
-app.get('/', (req, res) => res.send('Coming soon!'));
+app.use('/', express.static(__dirname + '/../web/'));
 
 app.get('/api/authenticate', (req, res) => {
 	res.send({});
