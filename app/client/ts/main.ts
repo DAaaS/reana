@@ -5,10 +5,14 @@ import {bootstrap} from 'angular2/platform/browser';
 
 @Component({
   selector: 'main',
-  template: '<div>Hello World!</div>'
+  templateUrl: 'views/main.html'
 })
 class Main {
+	message: string = "";
 
+	constructor(){
+		this.message = "Hello World";
+	}
 }
 
 bootstrap(Main);

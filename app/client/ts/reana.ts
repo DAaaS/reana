@@ -6,7 +6,7 @@ import {Component} from 'angular2/core';
 })
 
 @Component({
-  templateUrl: 'reana.html'
+  templateUrl: 'views/main.html'
 })
 
 export class Reana {
