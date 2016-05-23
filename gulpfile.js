@@ -40,6 +40,21 @@ gulp.task('sass', function () {
   return gulp.src('./app/client/scss/**/*.scss').pipe(sass().on('error', sass.logError)).pipe(gulp.dest('./build/app/client/css'));
 });
 
+gulp.task('copy_assets', function () {
+  return gulp.src([
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+    'node_modules/systemjs/dist/system.js',
+    'node_modules/zone.js/dist/zone.js',
+    'node_modules/reflect-metadata/Reflect.js',
+    'node_modules/angular2/bundles/angular2.js',
+    'node_modules/angular2/bundles/angular2-polyfills.js',
+    'node_modules/rxjs/bundles/Rx.js',
+    'node_modules/es6-shim/es6-shim.min.js',
+    'node_modules/es6-shim/es6-shim.map'
+  ]).pipe(gulp.dest('build/app/client/js/lib'));
+});
+
 gulp.task('copy_html', function() {
    gulp.src('./app/client/**/*.html').pipe(gulp.dest('./build/app/client'));
 });
@@ -54,12 +69,12 @@ gulp.task('watch', function(){
 gulp.task('serve', ['watch'], function(){
   var gls = require('gulp-live-server');
   var server = gls(['./build/app/server/js/main.js']);
-  gulp.watch(['./**/*.css', './**/*.js', './**/*.html'], function (file) {
+  gulp.watch(['./build/**/*.css', './build/**/*.js', './build/**/*.html'], function (file) {
     server.start.bind(server)();
   });
   server.start();
 });
 
-gulp.task('init', ['tsc', 'tsd', 'sass', 'copy_html']);
+gulp.task('init', ['tsc', 'tsd', 'sass', 'copy_html', 'copy_assets']);
 
 gulp.task('default', ['serve']);

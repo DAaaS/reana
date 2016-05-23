@@ -17,10 +17,19 @@
   },
   "homepage": "https://github.com/DAaaS/reana#readme",
   "devDependencies": {
+    "angular2": "^2.0.0-beta.17",
+    "bootstrap-sass": "^3.3.6",
+    "es6-shim": "^0.35.1",
     "gulp": "^3.9.1",
     "gulp-sass": "^2.3.1",
     "gulp-tsd": "^0.1.1",
-    "gulp-typescript": "^2.13.4"
+    "gulp-typescript": "^2.13.4",
+    "jquery": "^2.2.3",
+    "reflect-metadata": "^0.1.2",
+    "rxjs": "^5.0.0-beta.6",
+    "zone.js": "^0.6.12",
+    "systemjs": "0.19.6",
+    "traceur": "0.0.102"
   },
   "dependencies": {
     "express": "^4.13.4",
