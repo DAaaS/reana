@@ -14,7 +14,12 @@
     	<script src="/js/lib/Reflect.js"></script>
     	<script src="/js/lib/system.js"></script>
 	    <script>
-	      System.config({defaultJSExtensions: true});
+	      System.config({
+          paths: {
+              'angular2/*': '/js/lib/*'
+          },
+          defaultJSExtensions: true
+        });
 	    </script>
     	<script src="/js/lib/Rx.js"></script>
     	<script src="/js/lib/angular2.js"></script>
