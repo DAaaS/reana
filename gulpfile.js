@@ -57,7 +57,7 @@ gulp.task('watch', function(){
 
 gulp.task('serve', ['watch', 'server_tsc'], function(){
   var gls = require('gulp-live-server');
-  var server = gls(['./build/app/server/js/main.js']);
+  var server = gls(['./build/app/server/js/app.js']);
   gulp.watch(['./build/**/*.css', './build/**/*.js', './build/**/*.html'], function (file) {
     server.start.bind(server)();
   });
