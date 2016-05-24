@@ -1,4 +1,5 @@
 node_modules/
 .DS_Store
 app/server/ts/typings
+app/client/ts/typings
 build/

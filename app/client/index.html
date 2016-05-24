@@ -5,29 +5,22 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width">
       <link rel="stylesheet" href="/css/bootstrap.css" />
-      <link rel="stylesheet" href="/css/reana.css" />
+      <link rel="stylesheet" href="/css/app.css" />
 
-      <script src="/js/lib/jquery.js"></script>
-      <script src="/js/lib/bootstrap.js"></script>
-	    <script src="/js/lib/es6-shim.min.js"></script>
-	    <script src="/js/lib/zone.js"></script>
-    	<script src="/js/lib/Reflect.js"></script>
-    	<script src="/js/lib/system.js"></script>
-	    <script>
-	      System.config({
-          paths: {
-              'angular2/*': '/js/lib/*'
-          },
-          defaultJSExtensions: true
-        });
-	    </script>
-    	<script src="/js/lib/Rx.js"></script>
-    	<script src="/js/lib/angular2.js"></script>
-	    <script>
-	      System.import('/js/main').catch(console.log.bind(console));
-	    </script>
+      <script src="node_modules/jquery/dist/jquery.js"></script>
+      <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+      <script src="node_modules/core-js/client/shim.min.js"></script>
+      <script src="node_modules/zone.js/dist/zone.js"></script>
+      <script src="node_modules/reflect-metadata/Reflect.js"></script>
+      <script src="node_modules/systemjs/dist/system.src.js"></script>
+      <!-- 2. Configure SystemJS -->
+      <script src="js/systemjs.config.js"></script>
+      <script>
+        System.import('app').catch(function(err){ console.error(err); });
+      </script>
    	</head>
    	<body>
-   		<main>Loading...</main>
+   		<app>Loading...</app>
    	</body>
 </html>
