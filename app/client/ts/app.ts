@@ -3,6 +3,7 @@ import { Component, provide, OnInit, Inject} from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Route, Router, Redirect} from '@angular/router-deprecated';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { Http, HTTP_PROVIDERS} from '@angular/http';
 
 import { Login } from './login';
 
@@ -26,5 +27,6 @@ export class App implements OnInit {
 
 bootstrap(App, [
 	ROUTER_PROVIDERS,
+	HTTP_PROVIDERS,
 	provide(LocationStrategy, {useClass: HashLocationStrategy })
 ]);
