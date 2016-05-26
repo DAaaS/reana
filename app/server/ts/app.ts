@@ -11,4 +11,3 @@ app.get('/api/authenticate', (req, res) => {
 });
 
 app.listen(3000);
-

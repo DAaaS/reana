@@ -1,17 +1,34 @@
 
-import { Component } from '@angular/core';
-import { bootstrap }    from '@angular/platform-browser-dynamic';
+import { Component, provide, OnInit} from '@angular/core';
+import { bootstrap } from '@angular/platform-browser-dynamic';
+import { ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Route, Router, Redirect} from '@angular/router-deprecated';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
+import { Login } from './login';
 
 @Component({
   selector: 'app',
-  templateUrl: 'views/app.html'
+  templateUrl: 'views/app.html',
+  directives: [ROUTER_DIRECTIVES]
 })
-export class App {
-	message: string;
+@RouteConfig([
+	{path: '/login', component: Login, name: 'Login'},
+	new Redirect({
+		path: '/',
+		redirectTo: ['Login']
+	})
+])
+export class App implements OnInit {
 
-	constructor(){
-		this.message = "Hello World";
+	constructor(){}
+
+	ngOnInit(){
+		//this.router.navigate(['Login']);
 	}
+
 }
 
-bootstrap(App);
+bootstrap(App, [
+	ROUTER_PROVIDERS,
+	provide(LocationStrategy, {useClass: HashLocationStrategy })
+]);
