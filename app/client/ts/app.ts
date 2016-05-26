@@ -1,5 +1,5 @@
 
-import { Component, provide, OnInit} from '@angular/core';
+import { Component, provide, OnInit, Inject} from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Route, Router, Redirect} from '@angular/router-deprecated';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -12,18 +12,14 @@ import { Login } from './login';
   directives: [ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-	{path: '/login', component: Login, name: 'Login'},
-	new Redirect({
-		path: '/',
-		redirectTo: ['Login']
-	})
+	{path: '/login', component: Login, name: 'Login'}
 ])
 export class App implements OnInit {
 
-	constructor(){}
+	constructor(@Inject(Router) private router: Router){}
 
 	ngOnInit(){
-		//this.router.navigate(['Login']);
+		this.router.navigate(['Login']);
 	}
 
 }
