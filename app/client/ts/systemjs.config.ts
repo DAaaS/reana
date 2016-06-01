@@ -6,13 +6,15 @@
     'app':                        'js', // 'dist',
     '@angular':                   'node_modules/@angular',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
-    'rxjs':                       'node_modules/rxjs'
+    'rxjs':                       'node_modules/rxjs',
+    'angular2-cookie':            'node_modules/angular2-cookie'
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app':                        { main: 'app.js',  defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
     'angular2-in-memory-web-api': { defaultExtension: 'js' },
+    'angular2-cookie':            { main: 'core.js',  defaultExtension: 'js' }
   };
   var ngPackageNames = [
     'common',
@@ -29,6 +31,7 @@
   ngPackageNames.forEach(function(pkgName) {
     packages['@angular/'+pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
   });
+
   var config = {
     map: map,
     packages: packages
