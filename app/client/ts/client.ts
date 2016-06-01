@@ -7,7 +7,14 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class Client {
 
-	constructor(@Inject(Http) private http: Http, @Inject(CookieService) private cookieService:CookieService){}
+	token: string = null
+
+	constructor(
+		@Inject(Http) private http: Http,
+		@Inject(CookieService) private cookieService:CookieService
+	){
+		this.token = cookieService.get('token');
+	}
 
 	login(username, password){
 		var that = this;
@@ -16,7 +23,8 @@ export class Client {
 			'password=' + encodeURIComponent(password)
 		].join('&');
 		return this.http.get(url).map((result) => {
-			that.cookieService.putObject('token', result.json().token);
+			this.token = result.json().token;
+			that.cookieService.putObject('token', this.token);
 			return;
 		}).catch((error) => {
 			return Observable.throw("Either username or password is incorrect.");
@@ -24,7 +32,7 @@ export class Client {
 	}
 
 	isLoggedIn(){
-		return this.cookieService.get('token') != null;
+		return this.token != null;
 	}
 
 }
