@@ -10,7 +10,7 @@ var app = express();
 app.use('/', express.static(__dirname + '/../client/'));
 app.use('/bower_components/', express.static(__dirname + '/../../bower_components/'));
 
-app.get('/api/authenticate', function(req, res){
+app.get('/api/login', function(req, res){
 	var username = req.query.username;
 	var password = req.query.password;
 	
@@ -21,10 +21,10 @@ app.get('/api/authenticate', function(req, res){
 
 		if(isSuccess){
 			res.json({
-				token: result[1]
+				sessionId: result[1]
 			});
 		} else {
-			res.status(403).json({
+			res.status(400).json({
 				message: result[1],
 				code: result[2],
 			});
