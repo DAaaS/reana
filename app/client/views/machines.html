@@ -1,0 +1,19 @@
+
+
+<table ng-if="machinesController.machines.length > 0"  class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>State</th>
+			<th>Group</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="machine in machinesController.machines">
+			<td>{{machine.name}}</td>
+			<td>{{machine.state}}</td>
+			<td>{{machine.groupName}}</td>
+		</tr>
+	</tbody>
+</table>
+
