@@ -29,10 +29,23 @@
     });
 
     $stateProvider.state('home', {
+      templateUrl: 'views/home.html',
+      controller: 'HomeController as homeController',
+      abstract: true,
+    });
+
+    $stateProvider.state('home.machines', {
       resolve: { authenticate: authenticate },
       url: '/',
-      templateUrl: 'views/home.html',
-      controller: 'HomeController as homeController'
+      templateUrl: 'views/machines.html',
+      controller: 'MachinesController as machinesController'
+    });
+
+    $stateProvider.state('home.data', {
+      resolve: { authenticate: authenticate },
+      url: '/data',
+      templateUrl: 'views/data.html',
+      controller: 'DataController as datasController'
     });
 
     $stateProvider.state('about', {

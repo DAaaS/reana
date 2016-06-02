@@ -1,26 +1,12 @@
 
-
-
-<div class="panel panel-default">
-	<div class="panel-heading">Machines</div>
-	<table ng-if="homeController.machines.length > 0"  class="table">
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>State</th>
-				<th>Group</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="machine in homeController.machines">
-				<td>{{machine.name}}</td>
-				<td>{{machine.state}}</td>
-				<td>{{machine.groupName}}</td>
-			</tr>
-		</tbody>
-	</table>
-	<div ng-if="homeController.machines.length == 0" class="panel-body">
-		You currently don't have any machines.
-	</div>
-</div>
+<ul class="nav nav-tabs nav-tabs-head" role="tablist">
+    <li ng-class="{active: indexController.$state.includes('home.machines')}">
+    	<a ui-sref="home.machines" role="tab">Machines</a>
+    </li>
+    <li ng-class="{active: indexController.$state.includes('home.data')}">
+    	<a ui-sref="home.data" role="tab">Data</a>
+    </li>
+</ul>
+<br>
+<div ui-view></div>
 

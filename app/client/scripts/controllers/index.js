@@ -11,7 +11,7 @@
 
 	    $rootScope.$on('session:change', function(){
 	    	if(reana.sessionId()){
-	    		$state.go('home');
+	    		$state.go('home.machines');
 	    		that.username = reana.username();
 	    	} else {
 	    		$state.go('login');
