@@ -22,6 +22,8 @@ import { Home } from './home';
 ])
 export class App implements OnInit {
 
+	username: string = null
+
 	constructor(
 		@Inject(Router) private router: Router,
 		@Inject(Client) private client: Client
@@ -33,6 +35,10 @@ export class App implements OnInit {
 		} else {
 			this.router.navigate(['Login']);
 		}
+	}
+
+	logout(){
+		alert('logout');
 	}
 
 }
