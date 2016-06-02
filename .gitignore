@@ -1,5 +1,6 @@
-node_modules/
+/node_modules
+/dist
+/.tmp
+/.sass-cache
+/bower_components
 .DS_Store
-app/server/ts/typings
-app/client/ts/typings
-build/
