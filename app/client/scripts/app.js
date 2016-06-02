@@ -8,28 +8,31 @@
  *
  * Main module of the application.
  */
+(function(){
 angular
   .module('reanaApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.router'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
+  .config(function($stateProvider, $urlRouterProvider) {
+
+    $stateProvider.state('home', {
+      url: '/',
+      templateUrl: 'views/home.html',
+      controller: 'HomeController'
+    });
+
+    $stateProvider.state('about', {
+      url: '/about',
+      templateUrl: 'views/about.html'
+    });
+
+    $urlRouterProvider.otherwise('/');
+
   });
+
+})();

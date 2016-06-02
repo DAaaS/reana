@@ -1,12 +1,4 @@
-# reana
+# ReAna
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.15.1.
+**Re**mote **Ana**lysis - the front end interface for accessing the Science and Technology Facilities Council's computational resources for remote analysis.
 
-## Build & development
-
-Run `grunt` for building and `grunt serve` for preview.
-
-## Testing
-
-Running `grunt test` will run the unit tests with karma.
