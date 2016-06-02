@@ -30,6 +30,22 @@
     	$rootScope.$broadcast('session:change');
   	};
 
+  	this.machines = helpers.overload({
+  		'object': function(options){
+  			var params = {
+  				username: this.username(),
+  				sessionId: this.sessionId()
+  			};
+  			return this.get('machines', params, options)
+  		},
+  		'promise': function(timeout){
+  			return this.machines({timeout: timeout});
+  		},
+  		'': function(){
+  			return this.machines({});
+  		}
+  	});
+
   	helpers.generateRestMethods(this, "/api/");
   });
 
