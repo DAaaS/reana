@@ -6,6 +6,7 @@
 			<th>Name</th>
 			<th>State</th>
 			<th>Group</th>
+			<th>&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -13,6 +14,9 @@
 			<td>{{machine.name}}</td>
 			<td>{{machine.state}}</td>
 			<td>{{machine.groupName}}</td>
+			<td>
+				<button class="btn btn-xs btn-primary" ng-click="machinesController.view(machine)">View</button>
+			</td>
 		</tr>
 	</tbody>
 </table>

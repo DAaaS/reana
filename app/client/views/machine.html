@@ -1,0 +1,14 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h3 class="modal-title">{{machinesController.machine.name}}</h3>
+    </div>
+    <div class="modal-body" take-up-remaining-height>
+        <div ng-if="machineController.open" class="text-center" display="position: absolute; padding: 0px;">
+            <vnc host="localhost" port="29876" is-connected="true" view-only="false" path="/websockify?token={{machineController.token}}" display="machineController.display" true-color="false"></vnc>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="machineController.toFullScreen()">Full Screen</button>
+        <button class="btn btn-warning" ng-click="machineController.close()">Close</button>
+    </div>
+</div
