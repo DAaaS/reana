@@ -13,12 +13,11 @@
 
     	$uibModalInstance.rendered.then(function(){
     		that.open = true;
-            that.display = { height: $scope.height, fitTo: 'height'};
+            that.display = { height: $scope.height, fitTo: 'height', scale: 1};
     	});
 
         this.toFullScreen = function() {
             this.display.fullScreen = true;
-            this.fitTo = 'scale';
         };
 
     	this.close = function() {
