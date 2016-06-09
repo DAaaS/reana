@@ -13,15 +13,6 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -67,6 +58,44 @@
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-bower-components</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/bower_components</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>../../bower_components</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>          
+                        </configuration>            
+                    </execution>
+                    <execution>
+                        <id>copy-client</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>../client</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>          
+                        </configuration>            
                     </execution>
                 </executions>
             </plugin>
