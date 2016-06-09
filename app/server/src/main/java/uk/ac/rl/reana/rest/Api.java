@@ -26,6 +26,8 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
+import java.net.MalformedURLException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.XmlRpcException;
@@ -41,26 +43,22 @@ public class Api {
     private static final Logger logger = LoggerFactory.getLogger(Api.class);
     
     @GET
-    @Path("/authenticate")
+    @Path("/login")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response authenticate(
+    public Response login(
             @QueryParam("username") String username,
-            @QueryParam("password") String password) {
+            @QueryParam("password") String password)
+            throws java.net.MalformedURLException, XmlRpcException {
         
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL("https://hn1.nubes.rl.ac.uk/RPC2"));
-        
-        //client.methodCall('one.user.login', [username + ":" + password, username, "", -1], function(error, result) {
+        config.setServerURL(new URL("http://hn1.nubes.rl.ac.uk/RPC2"));
+        config.setEnabledForExceptions(true);
         
         XmlRpcClient client = new XmlRpcClient();
         client.setConfig(config);
         Object[] params = new Object[]{username + ":" + password, username, "", -1};
-        try {
-            Object result = client.execute("one.user.login", params);
-        } catch(XmlRpcException e) {
-            
-        }
-    
+        Object result = client.execute("one.user.login", params);
+        
         return Response.ok().entity(result).build();
     }
 
