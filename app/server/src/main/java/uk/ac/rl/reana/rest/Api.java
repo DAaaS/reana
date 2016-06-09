@@ -23,6 +23,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,17 +53,20 @@ public class Api {
             @QueryParam("password") String password)
             throws java.net.MalformedURLException, XmlRpcException {
         
+        JsonObjectBuilder out = Json.createObjectBuilder();
+        
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL("http://hn1.nubes.rl.ac.uk/RPC2"));
+        config.setServerURL(new URL("https://hn1.nubes.rl.ac.uk/RPC2"));
         config.setEnabledForExceptions(true);
         
         XmlRpcClient client = new XmlRpcClient();
         client.setConfig(config);
         Object[] params = new Object[]{username + ":" + password, username, "", -1};
-        Object result = client.execute("one.user.login", params);
+        Object[] result = (Object[]) client.execute("one.user.login", params);
         
-        return Response.ok().entity(result).build();
+        out.add("result", (boolean) result[0]);
+        
+        return Response.ok().entity(out.build().toString()).build();
     }
 
-    
 }
