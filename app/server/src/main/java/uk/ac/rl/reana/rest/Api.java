@@ -64,9 +64,19 @@ public class Api {
         Object[] params = new Object[]{username + ":" + password, username, "", -1};
         Object[] result = (Object[]) client.execute("one.user.login", params);
         
-        out.add("result", (boolean) result[0]);
+        boolean isSuccess = (boolean) result[0];
+        Response response;
         
-        return Response.ok().entity(out.build().toString()).build();
+        if(isSuccess){
+            out.add("sessionId", (String) result[1]);
+            return Response.ok().entity(out.build().toString()).build();
+        } else {
+            out.add("message", (String) result[1]);
+            out.add("code", (Integer) result[2]);
+            return Response.status(400).entity(out.build().toString()).build();
+        }
+        
+        
     }
 
 }
