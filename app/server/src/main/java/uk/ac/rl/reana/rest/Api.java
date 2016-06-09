@@ -29,11 +29,8 @@ import javax.json.JsonObjectBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-import org.apache.xmlrpc.XmlRpcException;
+import uk.ac.rl.reana.cloudclient.CloudClient;
+import uk.ac.rl.reana.cloudclient.CloudClientException;
 
 /**
  *
@@ -43,6 +40,7 @@ import org.apache.xmlrpc.XmlRpcException;
 @LocalBean
 @Path("")
 public class Api {
+    
     private static final Logger logger = LoggerFactory.getLogger(Api.class);
     
     @GET
@@ -50,33 +48,14 @@ public class Api {
     @Produces({MediaType.APPLICATION_JSON})
     public Response login(
             @QueryParam("username") String username,
-            @QueryParam("password") String password)
-            throws java.net.MalformedURLException, XmlRpcException {
+            @QueryParam("password") String password) {
         
-        JsonObjectBuilder out = Json.createObjectBuilder();
-        
-        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        config.setServerURL(new URL("https://hn1.nubes.rl.ac.uk/RPC2"));
-        config.setEnabledForExceptions(true);
-        
-        XmlRpcClient client = new XmlRpcClient();
-        client.setConfig(config);
-        Object[] params = new Object[]{username + ":" + password, username, "", -1};
-        Object[] result = (Object[]) client.execute("one.user.login", params);
-        
-        boolean isSuccess = (boolean) result[0];
-        Response response;
-        
-        if(isSuccess){
-            out.add("sessionId", (String) result[1]);
-            return Response.ok().entity(out.build().toString()).build();
-        } else {
-            out.add("message", (String) result[1]);
-            out.add("code", (Integer) result[2]);
-            return Response.status(400).entity(out.build().toString()).build();
+        try {
+            return new CloudClient().login(username, password).toRestResponse();
+        } catch(CloudClientException e) {
+            return e.toRestResponse();
         }
         
-        
     }
-
+    
 }
