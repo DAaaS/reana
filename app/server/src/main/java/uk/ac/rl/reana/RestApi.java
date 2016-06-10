@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.rl.reana.rest;
+package uk.ac.rl.reana;
 
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -36,9 +36,9 @@ import uk.ac.rl.reana.cloudclient.CloudClientException;
 @Stateless
 @LocalBean
 @Path("")
-public class Api {
+public class RestApi {
     
-    private static final Logger logger = LoggerFactory.getLogger(Api.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestApi.class);
     
     @GET
     @Path("/login")

@@ -14,7 +14,12 @@ import javax.json.JsonObjectBuilder;
  */
 public class Session extends Entity {
     
+    
     private String sessionId;
+    
+    public Session(CloudClient cloudClient){
+        super(cloudClient);
+    }
     
     public String getSessionId() {
         return sessionId;

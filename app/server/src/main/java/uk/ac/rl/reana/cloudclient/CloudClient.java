@@ -68,7 +68,7 @@ public class CloudClient {
             boolean isSuccess = (boolean) result[0];
 
             if(isSuccess){
-                Session out = new Session();
+                Session out = new Session(this);
                 out.setSessionId(username + ":" + (String) result[1]);
                 return out;
             }
@@ -101,7 +101,7 @@ public class CloudClient {
             boolean isSuccess = (boolean) result[0];
 
             if(isSuccess){
-                User out = new User();
+                User out = new User(this);
                 Document document = createDocument((String) result[1]);
                 XPath xPath =  XPathFactory.newInstance().newXPath();
                 out.setUsername((String) xPath.compile("USER/NAME").evaluate(document));
@@ -180,7 +180,7 @@ public class CloudClient {
                 NodeList machines = (NodeList) xPath.compile("VM_POOL/VM").evaluate(document, XPathConstants.NODESET);
                 
                 for(int i = 0; i < machines.getLength(); i++){
-                    Machine machine = new Machine();
+                    Machine machine = new Machine(this);
                     Node machineNode = machines.item(i);
                     JsonObjectBuilder machineObject = Json.createObjectBuilder();
                     machine.setId(Integer.parseInt(xPath.compile("ID").evaluate(machineNode)));

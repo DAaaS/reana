@@ -13,6 +13,12 @@ import javax.json.JsonObjectBuilder;
  * @author elz24996
  */
 public abstract class Entity implements ResponseProducer {
+    
+    protected CloudClient cloudClient;
+    
+    public Entity(CloudClient cloudClient){
+        this.cloudClient  = cloudClient;
+    }
    
     public abstract JsonObjectBuilder toJsonObjectBuilder();
     

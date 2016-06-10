@@ -8,10 +8,14 @@ package uk.ac.rl.reana.cloudclient;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import javax.ejb.EJB;
+import uk.ac.rl.reana.Websockify;
+
 /**
  *
  * @author elz24996
  */
+
 public class Machine extends Entity {
     
     private Integer id;
@@ -20,7 +24,13 @@ public class Machine extends Entity {
     private String state;
     private String host;
     
+    @EJB
+    Websockify websockify;
 
+    public Machine(CloudClient cloudClient){
+        super(cloudClient);
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -61,6 +71,18 @@ public class Machine extends Entity {
         this.host = host;
     }
     
+    public String getWebsockifyToken(){
+        try {
+            if(websockify == null){
+                return "foo";
+            } else {
+                return websockify.getToken(cloudClient.getUser().getUsername(), getHost());
+            }
+        } catch(Exception e) {
+            return e.toString();
+        }
+    }
+    
     
     public JsonObjectBuilder toJsonObjectBuilder(){
         JsonObjectBuilder out = Json.createObjectBuilder();
@@ -69,6 +91,7 @@ public class Machine extends Entity {
         out.add("state", getState());
         out.add("groupName", getGroupName());
         out.add("host", getHost());
+        out.add("websockifyToken", getWebsockifyToken());
         return out;
     }
     

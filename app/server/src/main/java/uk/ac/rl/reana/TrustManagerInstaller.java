@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.rl.reana.init;
+package uk.ac.rl.reana;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;

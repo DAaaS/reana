@@ -16,6 +16,10 @@ import javax.json.JsonObjectBuilder;
 public class User extends Entity {
 
     private String username;
+    
+    public User(CloudClient cloudClient){
+        super(cloudClient);
+    }
 
     public String getUsername() {
         return username;
