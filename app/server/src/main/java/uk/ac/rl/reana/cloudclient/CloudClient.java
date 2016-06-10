@@ -79,7 +79,7 @@ public class CloudClient {
         
         throw new BadRequestException("Either your username or password is incorrect");
     }
-    
+
     private static String[] machineStates = {
         "LCM_INIT",
         "PROLOG",
@@ -115,7 +115,7 @@ public class CloudClient {
         "PROLOG_UNDEPLOY",
         "BOOT_UNDEPLOY"
     };
-    
+
     public JsonResponse getMachines()
             throws CloudClientException {
         
