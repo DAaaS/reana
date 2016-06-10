@@ -36,9 +36,7 @@
   				username: this.username(),
   				sessionId: this.sessionId()
   			};
-  			return this.get('machines', params, options).then(function(response){
-          return response.machines;
-        });
+  			return this.get('machines', params, options);
   		},
   		'promise': function(timeout){
   			return this.machines({timeout: timeout});

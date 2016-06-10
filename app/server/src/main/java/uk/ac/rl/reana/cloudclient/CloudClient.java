@@ -58,7 +58,7 @@ public class CloudClient {
         this.sessionId = sessionId;
     }
 
-    public JsonResponse login(String username, String password)
+    public User login(String username, String password)
             throws CloudClientException {
         
         Object[] params = new Object[]{username + ":" + password, username, "", -1};
@@ -68,9 +68,8 @@ public class CloudClient {
             boolean isSuccess = (boolean) result[0];
 
             if(isSuccess){
-                JsonResponse out = new JsonResponse();
-                this.sessionId = username + ":" + (String) result[1];
-                out.getBuilder().add("sessionId", sessionId);
+                User out = new User();
+                out.setSessionId(username + ":" + (String) result[1]);
                 return out;
             }
         } catch(Exception e){
@@ -116,7 +115,7 @@ public class CloudClient {
         "BOOT_UNDEPLOY"
     };
 
-    public JsonResponse getMachines()
+    public EntityList<Machine> getMachines()
             throws CloudClientException {
         
         Object[] params = new Object[]{
@@ -138,7 +137,7 @@ public class CloudClient {
             boolean isSuccess = (boolean) result[0];
 
             if(isSuccess){
-                JsonResponse out = new JsonResponse();
+                EntityList<Machine> out = new EntityList<Machine>();
                 
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
@@ -153,18 +152,16 @@ public class CloudClient {
                 
                 JsonArrayBuilder machinesArray = Json.createArrayBuilder();
                 for(int i = 0; i < machines.getLength(); i++){
-                    Node machine = machines.item(i);
+                    Machine machine = new Machine();
+                    Node machineNode = machines.item(i);
                     JsonObjectBuilder machineObject = Json.createObjectBuilder();
-                    machineObject.add("id", Integer.parseInt(xPath.compile("ID").evaluate(machine)));
-                    machineObject.add("name", xPath.compile("NAME").evaluate(machine));
-                    machineObject.add("groupName", xPath.compile("GNAME").evaluate(machine));
-                    machineObject.add("state", machineStates[Integer.parseInt(xPath.compile("STATE").evaluate(machine))]);
-                    machineObject.add("host", xPath.compile("HISTORY_RECORDS/HISTORY/HOSTNAME").evaluate(machine));
-                    machinesArray.add(machineObject);
+                    machine.setId(Integer.parseInt(xPath.compile("ID").evaluate(machineNode)));
+                    machine.setName(xPath.compile("NAME").evaluate(machineNode));
+                    machine.setGroupName(xPath.compile("GNAME").evaluate(machineNode));
+                    machine.setState(machineStates[Integer.parseInt(xPath.compile("STATE").evaluate(machineNode))]);
+                    machine.setHost(xPath.compile("HISTORY_RECORDS/HISTORY/HOSTNAME").evaluate(machineNode));
+                    out.add(machine);
                 }
-                
-                out.getBuilder().add("machines", machinesArray.build());
-                
                 return out;
             } else {
                 throw new BadRequestException((String) result[1]);
@@ -172,6 +169,6 @@ public class CloudClient {
         } catch(Exception e){
             throw new UnexpectedException(e.getMessage());
         }
-            
+        
     }
 }

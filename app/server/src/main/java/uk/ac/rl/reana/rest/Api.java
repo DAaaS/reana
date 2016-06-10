@@ -48,9 +48,9 @@ public class Api {
             @QueryParam("password") String password) {
         
         try {
-            return new CloudClient().login(username, password).toRestResponse();
+            return new CloudClient().login(username, password).toResponse();
         } catch(CloudClientException e) {
-            return e.toRestResponse();
+            return e.toResponse();
         }
         
     }
@@ -62,9 +62,9 @@ public class Api {
             @QueryParam("sessionId") String sessionId) {
         
         try {
-            return new CloudClient(sessionId).getMachines().toRestResponse();
+            return new CloudClient(sessionId).getMachines().toResponse();
         } catch(CloudClientException e) {
-            return e.toRestResponse();
+            return e.toResponse();
         }
         
     }

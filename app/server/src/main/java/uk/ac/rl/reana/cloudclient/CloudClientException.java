@@ -13,7 +13,7 @@ import javax.json.Json;
  *
  * @author elz24996
  */
-public class CloudClientException extends Exception {
+public class CloudClientException extends Exception implements ResponseProducer {
     
     private String message;
     protected int status;
@@ -27,9 +27,12 @@ public class CloudClientException extends Exception {
         return this.message;
     }
     
-    public Response toRestResponse(){
-        String json = Json.createObjectBuilder().add("message", (String) getMessage()).build().toString();
-        return Response.status(status).entity(json).build();
+    public String toString(){
+        return Json.createObjectBuilder().add("message", (String) getMessage()).build().toString();
+    }
+    
+    public Response toResponse(){
+        return Response.status(status).entity(toString()).build();
     }
     
 }
