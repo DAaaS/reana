@@ -8,7 +8,6 @@ package uk.ac.rl.reana.cloudclient;
 import javax.ws.rs.core.Response;
 
 import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 
 /**
  *

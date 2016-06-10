@@ -23,9 +23,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +49,20 @@ public class Api {
         
         try {
             return new CloudClient().login(username, password).toRestResponse();
+        } catch(CloudClientException e) {
+            return e.toRestResponse();
+        }
+        
+    }
+    
+    @GET
+    @Path("/machines")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response login(
+            @QueryParam("sessionId") String sessionId) {
+        
+        try {
+            return new CloudClient(sessionId).getMachines().toRestResponse();
         } catch(CloudClientException e) {
             return e.toRestResponse();
         }
