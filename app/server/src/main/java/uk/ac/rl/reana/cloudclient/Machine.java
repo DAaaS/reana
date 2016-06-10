@@ -5,7 +5,6 @@
  */
 package uk.ac.rl.reana.cloudclient;
 
-import java.math.BigDecimal;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 

@@ -59,10 +59,15 @@ public class Api {
     @Path("/user")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getUser(
-            @QueryParam("sessionId") String sessionId) {
+            @QueryParam("sessionId") String sessionId,
+            @QueryParam("userId") String userId) {
         
         try {
-            return new CloudClient(sessionId).getUser().toResponse();
+            if(userId != null){
+                return new CloudClient(sessionId).getUser(Integer.parseInt(userId)).toResponse();
+            } else {
+                return new CloudClient(sessionId).getUser().toResponse();
+            }
         } catch(CloudClientException e) {
             return e.toResponse();
         }
