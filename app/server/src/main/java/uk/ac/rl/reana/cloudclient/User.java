@@ -15,19 +15,19 @@ import javax.json.JsonObjectBuilder;
  */
 public class User extends Entity {
 
-    private String sessionId;
-    
-    public String getSessionId() {
-        return sessionId;
+    private String username;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public JsonObjectBuilder toJsonObjectBuilder(){
         JsonObjectBuilder out = Json.createObjectBuilder();
-        out.add("sessionId", getSessionId());
+        out.add("username", getUsername());
         return out;
     }
     

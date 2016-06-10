@@ -58,7 +58,7 @@ public class CloudClient {
         this.sessionId = sessionId;
     }
 
-    public User login(String username, String password)
+    public Session login(String username, String password)
             throws CloudClientException {
         
         Object[] params = new Object[]{username + ":" + password, username, "", -1};
@@ -68,7 +68,7 @@ public class CloudClient {
             boolean isSuccess = (boolean) result[0];
 
             if(isSuccess){
-                User out = new User();
+                Session out = new Session();
                 out.setSessionId(username + ":" + (String) result[1]);
                 return out;
             }
@@ -77,6 +77,42 @@ public class CloudClient {
         }
         
         throw new BadRequestException("Either your username or password is incorrect");
+    }
+    
+    public User getUser()
+            throws CloudClientException {
+        
+        return getUser(-1);
+    }
+    
+    public User getUser(Integer id)
+            throws CloudClientException {
+        
+        Object[] params = new Object[]{
+            //auth token
+            sessionId,
+            //object id
+            id
+        };
+        
+        try {
+            Object[] result = (Object[]) client.execute("one.user.info", params);
+
+            boolean isSuccess = (boolean) result[0];
+
+            if(isSuccess){
+                User out = new User();
+                Document document = createDocument((String) result[1]);
+                XPath xPath =  XPathFactory.newInstance().newXPath();
+                out.setUsername((String) xPath.compile("USER/NAME").evaluate(document));
+                return out;
+            } else {
+                throw new BadRequestException((String) result[1]);
+            }
+        } catch(Exception e){
+            throw new UnexpectedException(e.getMessage());
+        }
+        
     }
 
     private static String[] machineStates = {
@@ -139,18 +175,10 @@ public class CloudClient {
             if(isSuccess){
                 EntityList<Machine> out = new EntityList<Machine>();
                 
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                String xml = (String) result[1];
-                
-                ByteArrayInputStream input =  new ByteArrayInputStream(xml.getBytes("UTF-8"));
-                Document doc = builder.parse(input);
-                
+                Document document = createDocument((String) result[1]);
                 XPath xPath =  XPathFactory.newInstance().newXPath();
+                NodeList machines = (NodeList) xPath.compile("VM_POOL/VM").evaluate(document, XPathConstants.NODESET);
                 
-                NodeList machines = (NodeList) xPath.compile("VM_POOL/VM").evaluate(doc, XPathConstants.NODESET);
-                
-                JsonArrayBuilder machinesArray = Json.createArrayBuilder();
                 for(int i = 0; i < machines.getLength(); i++){
                     Machine machine = new Machine();
                     Node machineNode = machines.item(i);
@@ -170,5 +198,12 @@ public class CloudClient {
             throw new UnexpectedException(e.getMessage());
         }
         
+    }
+    
+    private Document createDocument(String xml) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        ByteArrayInputStream input = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+        return builder.parse(input);
     }
 }

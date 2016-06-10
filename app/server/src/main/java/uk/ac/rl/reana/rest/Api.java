@@ -56,9 +56,23 @@ public class Api {
     }
     
     @GET
+    @Path("/user")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUser(
+            @QueryParam("sessionId") String sessionId) {
+        
+        try {
+            return new CloudClient(sessionId).getUser().toResponse();
+        } catch(CloudClientException e) {
+            return e.toResponse();
+        }
+        
+    }
+    
+    @GET
     @Path("/machines")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response login(
+    public Response getMachines(
             @QueryParam("sessionId") String sessionId) {
         
         try {
