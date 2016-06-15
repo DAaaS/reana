@@ -15,11 +15,12 @@
                 $timeout(function(){
                     $(document.body).append($element);
                 });
-
+                
                 $scope.$watch(function(){
                     if($scope.fullscreen){
                         show()
                         requestFullscreen();
+                        
                     }
                 });
 
