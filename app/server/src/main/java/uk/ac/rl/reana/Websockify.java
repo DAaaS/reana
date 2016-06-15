@@ -5,12 +5,6 @@
  */
 package uk.ac.rl.reana;
 
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Lock;
-import javax.ejb.EJB;
-import javax.ejb.LockType;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -28,14 +22,21 @@ import java.nio.charset.Charset;
  * @author elz24996
  */
 
-@Startup
-@Singleton
+
 public class Websockify {
    
-    @EJB
-    Properties properties;
+    private static Websockify instance = null;
+
+    public synchronized static Websockify getInstance() {
+       if(instance == null) {
+          instance = new Websockify();
+       }
+       return instance;
+    }
     
-    synchronized public String getToken(String username, String host) throws Exception {
+    private Properties properties = Properties.getInstance(); 
+    
+    public synchronized String getToken(String username, String host) throws Exception {
         String tokensDirectory = properties.getProperty("tokensDirectory", System.getProperty("user.home") + "/tokens");
         return new Websockify.TokenFile(tokensDirectory + "/" + username).getToken(host);
     }
@@ -59,14 +60,14 @@ public class Websockify {
 
             for(String line : lines){
                 String[] parts = line.split(":\\s+");
-                if(parts[1].equals(host)){
+                if(parts[1].equals(host  + ":5901")){
                     return parts[0];
                 }
             }
             
             String token = generateToken();
             
-            lines.add(token + ": " + host);
+            lines.add(token + ": " + host + ":5901");
             StringBuilder stringBuilder = new StringBuilder();
             for(String line : lines){
                stringBuilder.append(line + "\n");

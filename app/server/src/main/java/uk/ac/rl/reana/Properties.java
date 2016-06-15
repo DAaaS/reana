@@ -7,17 +7,21 @@ package uk.ac.rl.reana;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
 
 /**
  *
  * @author elz24996
  */
-@Startup
-@Singleton
 public class Properties extends java.util.Properties {
+    
+    private static Properties instance = null;
+
+    public synchronized static Properties getInstance() {
+       if(instance == null) {
+          instance = new Properties();
+       }
+       return instance;
+    }
     
     public Properties(){
         super();

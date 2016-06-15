@@ -20,6 +20,7 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     <!-- Force SSL for entire site -->
+    <!--
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>site</web-resource-name>
@@ -29,4 +30,5 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+    -->
 </web-app>

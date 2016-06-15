@@ -14,12 +14,11 @@
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    //'ngTouch',
+    'ngTouch',
     'ui.router',
     'ui.bootstrap',
     'ngStorage',
-    'inform',
-    'noVNC'
+    'inform'
   ]);
 
   app.config(function($stateProvider, $urlRouterProvider) {

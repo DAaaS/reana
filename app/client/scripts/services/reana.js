@@ -46,7 +46,11 @@
   		}
   	});
 
-  	helpers.generateRestMethods(this, "/api/");
+    if(window.location.port == '3000'){
+      helpers.generateRestMethods(this, "http://localhost:8080/api/");
+    } else {
+      helpers.generateRestMethods(this, "/api/");
+    }
   });
 
 })();

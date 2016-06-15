@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.InetAddress;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -30,7 +31,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
-import java.math.BigDecimal;
 
 /**
  *
@@ -187,7 +187,8 @@ public class CloudClient {
                     machine.setName(xPath.compile("NAME").evaluate(machineNode));
                     machine.setGroupName(xPath.compile("GNAME").evaluate(machineNode));
                     machine.setState(machineStates[Integer.parseInt(xPath.compile("STATE").evaluate(machineNode))]);
-                    machine.setHost(xPath.compile("HISTORY_RECORDS/HISTORY/HOSTNAME").evaluate(machineNode));
+                    String ip = xPath.compile("TEMPLATE/CONTEXT/ETH0_IP").evaluate(machineNode);
+                    machine.setHost(InetAddress.getByName(ip).getHostName());
                     out.add(machine);
                 }
                 return out;
