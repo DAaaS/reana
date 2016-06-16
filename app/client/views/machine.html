@@ -7,14 +7,16 @@
             <vnc token="machinesController.machine.websockifyToken"></vnc>
 
 
-            <div fullscreen="machineController.fullscreen">
-                <vnc ng-if="machineController.fullscreen" view-only="false" token="machinesController.machine.websockifyToken"></vnc>
+            <div fullscreen="machineController.fullScreen">
+                reachedFullScreen: {{reachedFullScreen}}
+                <!--<vnc ng-if="machineController.fullScreen" token="machinesController.machine.websockifyToken" change-resolution="true"></vnc>-->
+                
             </div>
 
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="machineController.fullscreen = true">Full Screen</button>
+        <button class="btn btn-primary" ng-click="machineController.toFullScreen()">Full Screen</button>
         <button class="btn btn-warning" ng-click="machineController.close()">Close</button>
     </div>
 </div

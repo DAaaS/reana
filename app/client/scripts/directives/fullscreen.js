@@ -12,9 +12,14 @@
               fullscreen: '='
             },
             controller: function($scope, $element, $timeout){
+
+                console.log($($element).html());
+
                 $timeout(function(){
                     $(document.body).append($element);
                 });
+
+                $($element).css('background', 'yellow');
                 
                 $scope.$watch(function(){
                     if($scope.fullscreen){
@@ -31,12 +36,17 @@
                 });
 
 
+                $scope.$parent.reachedFullScreen = false;
+                
+
                 function fullscreenChange(){
                     if(!isFullscreen()){
                         $scope.fullscreen = false;
                         hide();
+                    } else {
+
                     }
-                }
+                } 
 
                 function show(){
                     $(document.body).contents().hide();
