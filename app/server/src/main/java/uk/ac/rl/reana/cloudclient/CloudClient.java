@@ -106,6 +106,8 @@ public class CloudClient {
                 XPath xPath =  XPathFactory.newInstance().newXPath();
                 out.setUsername((String) xPath.compile("USER/NAME").evaluate(document));
                 return out;
+            } else if((int) result[2] == 2){
+                throw new NotAuthorizedException((String) result[1]);
             } else {
                 throw new BadRequestException((String) result[1]);
             }
@@ -192,6 +194,8 @@ public class CloudClient {
                     out.add(machine);
                 }
                 return out;
+            } else if((int) result[2] == 2){
+                throw new NotAuthorizedException((String) result[1]);
             } else {
                 throw new BadRequestException((String) result[1]);
             }

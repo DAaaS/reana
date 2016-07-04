@@ -19,13 +19,10 @@
                     $(document.body).append($element);
                 });
 
-                $($element).css('background', 'yellow');
-                
                 $scope.$watch(function(){
                     if($scope.fullscreen){
                         show()
                         requestFullscreen();
-                        
                     }
                 });
 
@@ -44,7 +41,7 @@
                         $scope.fullscreen = false;
                         hide();
                     } else {
-
+                        
                     }
                 } 
 
@@ -57,8 +54,6 @@
                     $(document.body).contents().show();
                     $($element).hide();
                 }
-
-
 
                 function isFullscreen(){
                     return fullscreenElement() !== undefined;

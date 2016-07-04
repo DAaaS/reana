@@ -37,9 +37,6 @@
                     interval = setInterval(pollSize, 50);
                 });
 
-
-                
-
                 $scope.$on('$destroy', function(){
                     clearInterval(interval);
                     noVnc.disconnect();
@@ -47,7 +44,7 @@
 
                 function resize(){
                     if($scope.changeResolution){
-                        if($($element).find('canvas').width() != width && $($element).find('canvas').height() != height){
+                        if($($element).find('canvas').width() != width || $($element).find('canvas').height() != height){
                             changeResolution(width, height);
                         }
                     } else {
@@ -87,7 +84,6 @@
                         if(currentWidth != width || currentHeight != height){
                             width = currentWidth;
                             height = currentHeight;
-
                             resize();
                         }
                     }
