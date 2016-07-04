@@ -58,6 +58,10 @@
 
   });
 
+  app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('HttpErrorInterceptor');
+  }]);
+
   app.run(['$rootScope', '$state', function ($rootScope, $state, $sessionStorage) {
       $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       if (error && error.isAuthenticated === false) {
