@@ -14,7 +14,7 @@ import java.net.InetAddress;
 
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-
+import org.apache.xmlrpc.XmlRpcException;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonArrayBuilder;
@@ -106,11 +106,13 @@ public class CloudClient {
                 XPath xPath =  XPathFactory.newInstance().newXPath();
                 out.setUsername((String) xPath.compile("USER/NAME").evaluate(document));
                 return out;
-            } else if((int) result[2] == 2){
-                throw new NotAuthorizedException((String) result[1]);
+            } else if((int) result[2] == 0x0100){
+                throw new AuthenticationException((String) result[1]);
             } else {
                 throw new BadRequestException((String) result[1]);
             }
+        } catch(CloudClientException e){
+            throw e;
         } catch(Exception e){
             throw new UnexpectedException(e.getMessage());
         }
@@ -194,11 +196,13 @@ public class CloudClient {
                     out.add(machine);
                 }
                 return out;
-            } else if((int) result[2] == 2){
-                throw new NotAuthorizedException((String) result[1]);
+            } else if((int) result[2] == 0x0100){
+                throw new AuthenticationException((String) result[1]);
             } else {
                 throw new BadRequestException((String) result[1]);
             }
+        } catch(CloudClientException e){
+            throw e;
         } catch(Exception e){
             throw new UnexpectedException(e.getMessage());
         }

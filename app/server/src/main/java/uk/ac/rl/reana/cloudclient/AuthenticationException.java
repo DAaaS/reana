@@ -9,10 +9,12 @@ package uk.ac.rl.reana.cloudclient;
  *
  * @author elz24996
  */
-public class NotAuthorizedException extends CloudClientException {
+public class AuthenticationException extends CloudClientException {
     
-    public NotAuthorizedException(String message){
+    public AuthenticationException(String message){
         super(message);
+        this.status = 401;
     }
     
 }
+
