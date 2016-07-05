@@ -3,7 +3,6 @@ require 'io/console'
 require 'ripl'
 require 'ripl/multi_line'
 require 'xmlrpc/client'
-require "openssl"
 
 puts "Enter username:"
 
@@ -57,7 +56,6 @@ class Command
 
 end
 
-
 class Workspace
 
 	def one
@@ -79,6 +77,5 @@ if !response.success?
 end
 
 $token = response.data
-
 
 Ripl.start :binding => Workspace.new.bindings
