@@ -179,9 +179,28 @@ public class CloudClient {
             if(isSuccess){
                 EntityList<Machine> out = new EntityList<Machine>();
                 
+                StringBuilder query = new StringBuilder();
+                query.append("VM_POOL/VM");
+                
+                EntityList<Template> templates = getTemplates();
+                if(templates.size() > 0){
+                    query.append("[");
+                }
+                for(int i = 0; i < templates.size(); i++){
+                    Template template = templates.get(i);
+                    query.append("TEMPLATE/CONTEXT/BASETEMPLATE=");
+                    query.append(template.getId());
+                    if(i < templates.size() - 1){
+                        query.append(" or ");
+                    }
+                }
+                if(templates.size() > 0){
+                    query.append("]");
+                }
+                
                 Document document = createDocument((String) result[1]);
                 XPath xPath =  XPathFactory.newInstance().newXPath();
-                NodeList machines = (NodeList) xPath.compile("VM_POOL/VM").evaluate(document, XPathConstants.NODESET);
+                NodeList machines = (NodeList) xPath.compile(query.toString()).evaluate(document, XPathConstants.NODESET);
                 
                 for(int i = 0; i < machines.getLength(); i++){
                     Machine machine = new Machine(this);
@@ -232,11 +251,12 @@ public class CloudClient {
                 
                 Document document = createDocument((String) result[1]);
                 XPath xPath =  XPathFactory.newInstance().newXPath();
-                NodeList templates = (NodeList) xPath.compile("VMTEMPLATE_POOL/VMTEMPLATE[GNAME=CCP4Users]").evaluate(document, XPathConstants.NODESET);
+                NodeList templates = (NodeList) xPath.compile("VMTEMPLATE_POOL/VMTEMPLATE[GNAME='CCP4Users']").evaluate(document, XPathConstants.NODESET);
                 
                 for(int i = 0; i < templates.getLength(); i++){
                     Template template = new Template(this);
                     Node templateNode = templates.item(i);
+                    template.setId(Integer.parseInt(xPath.compile("ID").evaluate(templateNode)));
                     template.setName(xPath.compile("NAME").evaluate(templateNode));
                     template.setDescription(xPath.compile("TEMPLATE/DESCRIPTION").evaluate(templateNode));
                     template.setCpuCount(Integer.parseInt(xPath.compile("TEMPLATE/CPU").evaluate(templateNode)));

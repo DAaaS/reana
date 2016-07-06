@@ -46,6 +46,22 @@
   		}
   	});
 
+    this.templates = helpers.overload({
+      'object': function(options){
+        var params = {
+          username: this.username(),
+          sessionId: this.sessionId()
+        };
+        return this.get('templates', params, options);
+      },
+      'promise': function(timeout){
+        return this.templates({timeout: timeout});
+      },
+      '': function(){
+        return this.templates({});
+      }
+    });
+
     if(window.location.port == '3000'){
       helpers.generateRestMethods(this, "https://localhost:8181/api/");
     } else {
