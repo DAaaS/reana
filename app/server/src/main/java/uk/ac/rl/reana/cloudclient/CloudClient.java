@@ -186,7 +186,6 @@ public class CloudClient {
                 for(int i = 0; i < machines.getLength(); i++){
                     Machine machine = new Machine(this);
                     Node machineNode = machines.item(i);
-                    JsonObjectBuilder machineObject = Json.createObjectBuilder();
                     machine.setId(Integer.parseInt(xPath.compile("ID").evaluate(machineNode)));
                     machine.setName(xPath.compile("NAME").evaluate(machineNode));
                     machine.setGroupName(xPath.compile("GNAME").evaluate(machineNode));
@@ -194,6 +193,55 @@ public class CloudClient {
                     String ip = xPath.compile("TEMPLATE/CONTEXT/ETH0_IP").evaluate(machineNode);
                     machine.setHost(InetAddress.getByName(ip).getHostName());
                     out.add(machine);
+                }
+                return out;
+            } else if((int) result[2] == 0x0100){
+                throw new AuthenticationException((String) result[1]);
+            } else {
+                throw new BadRequestException((String) result[1]);
+            }
+        } catch(CloudClientException e){
+            throw e;
+        } catch(Exception e){
+            throw new UnexpectedException(e.getMessage());
+        }
+        
+    }
+    
+    public EntityList<Template> getTemplates()
+            throws CloudClientException {
+        
+        Object[] params = new Object[]{
+            //auth token
+            sessionId,
+            //show only connected user’s and his group’s resources
+            -1,
+            //offset for pagination	
+            -1,
+            //number of entries to return
+            -1
+        };
+        
+        try {
+            Object[] result = (Object[]) client.execute("one.templatepool.info", params);
+
+            boolean isSuccess = (boolean) result[0];
+
+            if(isSuccess){
+                EntityList<Template> out = new EntityList<Template>();
+                
+                Document document = createDocument((String) result[1]);
+                XPath xPath =  XPathFactory.newInstance().newXPath();
+                NodeList templates = (NodeList) xPath.compile("VMTEMPLATE_POOL/VMTEMPLATE[GNAME=CCP4Users]").evaluate(document, XPathConstants.NODESET);
+                
+                for(int i = 0; i < templates.getLength(); i++){
+                    Template template = new Template(this);
+                    Node templateNode = templates.item(i);
+                    template.setName(xPath.compile("NAME").evaluate(templateNode));
+                    template.setDescription(xPath.compile("TEMPLATE/DESCRIPTION").evaluate(templateNode));
+                    template.setCpuCount(Integer.parseInt(xPath.compile("TEMPLATE/CPU").evaluate(templateNode)));
+                    template.setMemoryAllocation(Integer.parseInt(xPath.compile("TEMPLATE/MEMORY").evaluate(templateNode)));
+                    out.add(template);
                 }
                 return out;
             } else if((int) result[2] == 0x0100){

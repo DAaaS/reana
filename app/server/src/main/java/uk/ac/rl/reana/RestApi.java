@@ -88,4 +88,18 @@ public class RestApi {
         
     }
     
+    
+    @GET
+    @Path("/templates")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getTemplates(
+            @QueryParam("sessionId") String sessionId) {
+        
+        try {
+            return new CloudClient(sessionId).getTemplates().toResponse();
+        } catch(CloudClientException e) {
+            return e.toResponse();
+        }
+        
+    }
 }
