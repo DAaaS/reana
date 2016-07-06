@@ -6,6 +6,7 @@ require 'xmlrpc/client'
 require 'nokogiri'
 require 'net/http'
 require "net/https"
+require "rexml/document"
 
 
 puts "Enter username:"
@@ -42,6 +43,14 @@ class Response
 
 	def doc
 		Nokogiri::XML(data)
+	end
+
+	def pretty_print
+		doc = REXML::Document.new data
+		out = ""
+		doc.write(out, 4)
+		puts out
+
 	end
 
 end
