@@ -13,7 +13,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -82,6 +82,23 @@ public class RestApi {
         
         try {
             return new CloudClient(sessionId).getMachines().toResponse();
+        } catch(CloudClientException e) {
+            return e.toResponse();
+        }
+        
+    }
+    
+    
+    @POST
+    @Path("/machines")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response createMachine(
+            @FormParam("sessionId") String sessionId,
+            @FormParam("templateId") Integer templateId,
+            @FormParam("name") String name) {
+        
+        try {
+            return new CloudClient(sessionId).createMachine(templateId, name).toResponse();
         } catch(CloudClientException e) {
             return e.toResponse();
         }

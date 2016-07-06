@@ -15,13 +15,13 @@ import javax.json.JsonArrayBuilder;
  *
  * @author elz24996
  */
-public class EntityList<T> extends ArrayList<Entity> implements ResponseProducer {
+public class EntityList<T> extends ArrayList<T> implements ResponseProducer {
     
     @Override
     public String toString(){
         JsonArrayBuilder out = Json.createArrayBuilder();
-        for(Entity entity : this){
-            out.add(entity.toJsonObjectBuilder());
+        for(T entity : this){
+            out.add(((Entity) entity).toJsonObjectBuilder());
         }
         return out.build().toString();
     }

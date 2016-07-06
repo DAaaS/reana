@@ -46,6 +46,23 @@
   		}
   	});
 
+    this.createMachine = helpers.overload({
+      'number, string, object': function(templateId, name, options){
+        var params = {
+          templateId: templateId,
+          name:  name,
+          sessionId: this.sessionId()
+        };
+        return this.post('machines', params, options);
+      },
+      'number, string, promise': function(templateId, name, timeout){
+        return this.createMachine(templateId, name, {timeout: timeout});
+      },
+      'number, string': function(templateId, name){
+        return this.createMachine(templateId, name, {});
+      }
+    });
+
     this.templates = helpers.overload({
       'object': function(options){
         var params = {

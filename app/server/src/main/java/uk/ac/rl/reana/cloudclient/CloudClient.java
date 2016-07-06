@@ -227,6 +227,64 @@ public class CloudClient {
         
     }
     
+    public Machine createMachine(Integer templateId, String name)
+            throws CloudClientException {
+        Machine out = new Machine(this);
+        
+        Object[] params = new Object[]{
+            //auth token
+            sessionId,
+            //which template to base vm on
+            templateId,
+            //name of vm	
+            name,
+            //start normally
+            false,
+            //extra content variables
+            ""
+        };
+        
+        try {
+            Object[] result = (Object[]) client.execute("one.template.instantiate", params);
+
+            boolean isSuccess = (boolean) result[0];
+
+            if(isSuccess){
+                Integer machineId = (Integer) result[1];
+                
+                params = new Object[]{
+                    //auth token
+                    sessionId,
+                    machineId
+                };
+                
+                
+                result = (Object[]) client.execute("one.vm.info", params);
+                
+                Document document = createDocument((String) result[1]);
+                XPath xPath =  XPathFactory.newInstance().newXPath();
+
+                out.setId(Integer.parseInt(xPath.compile("VM/ID").evaluate(document)));
+                out.setName(xPath.compile("VM/NAME").evaluate(document));
+                out.setGroupName(xPath.compile("VM/GNAME").evaluate(document));
+                out.setState(machineStates[Integer.parseInt(xPath.compile("VM/STATE").evaluate(document))]);
+                String ip = xPath.compile("VM/TEMPLATE/CONTEXT/ETH0_IP").evaluate(document);
+                out.setHost(InetAddress.getByName(ip).getHostName());
+    
+            } else if((int) result[2] == 0x0100){
+                throw new AuthenticationException((String) result[1]);
+            } else {
+                throw new BadRequestException((String) result[1]);
+            }
+        } catch(CloudClientException e){
+            throw e;
+        } catch(Exception e){
+            throw new UnexpectedException(e.getMessage());
+        }
+        
+        return out;
+    }
+    
     public EntityList<Template> getTemplates()
             throws CloudClientException {
         
