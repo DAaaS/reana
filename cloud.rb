@@ -3,16 +3,20 @@ require 'io/console'
 require 'ripl'
 require 'ripl/multi_line'
 require 'xmlrpc/client'
+require 'nokogiri'
+require 'net/http'
+require "net/https"
+
 
 puts "Enter username:"
 
-username = STDIN.gets
+$username = STDIN.gets.gsub(/[\r\n]/, '')
 
 puts "Enter password:"
 
-password = STDIN.noecho(&:gets)
+password = STDIN.noecho(&:gets).gsub(/[\r\n]/, '')
 
-conn_args = {
+$conn_args = {
 	:host => 'hn1.nubes.rl.ac.uk',
 	:use_ssl => true,
 	:path => "/RPC2"
@@ -36,6 +40,10 @@ class Response
 		is_success
 	end
 
+	def doc
+		Nokogiri::XML(data)
+	end
+
 end
 
 class Command
@@ -45,9 +53,9 @@ class Command
 	end
 
 	def run(*args)
-		connection = XMLRPC::Client.new_from_hash(conn_args)
+		connection = XMLRPC::Client.new_from_hash($conn_args)
 		connection.instance_variable_get("@http").verify_mode = OpenSSL::SSL::VERIFY_NONE
-		Response.new *connection.call(@name, $token, *args)
+		Response.new *connection.call(@name, "#{$username}:#{$token}", *args)
 	end
 
 	def method_missing(name, *args, &block)
@@ -68,9 +76,10 @@ class Workspace
   
 end
 
-connection = XMLRPC::Client.new_from_hash(conn_args)
+connection = XMLRPC::Client.new_from_hash($conn_args)
 connection.instance_variable_get("@http").verify_mode = OpenSSL::SSL::VERIFY_NONE
-response = Response.new *connection.call("one.user.login", username + ":" + password, username, "", -1)
+
+response = Response.new *connection.call("one.user.login", $username + ":" + password, $username, "", -1)
 if !response.success?
 	puts "Either your username or password is incorrect."
 	exit
