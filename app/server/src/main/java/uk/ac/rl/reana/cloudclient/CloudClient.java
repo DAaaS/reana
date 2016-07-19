@@ -152,7 +152,34 @@ public class CloudClient {
         "SHUTDOWN_UNDEPLOY",
         "EPILOG_UNDEPLOY",
         "PROLOG_UNDEPLOY",
-        "BOOT_UNDEPLOY"
+        "BOOT_UNDEPLOY",
+        "HOTPLUG_PROLOG_POWEROFF",
+        "HOTPLUG_EPILOG_POWEROFF",
+        "BOOT_MIGRATE",
+        "BOOT_FAILURE",
+        "BOOT_MIGRATE_FAILURE",
+        "PROLOG_MIGRATE_FAILURE",
+        "PROLOG_FAILURE",
+        "EPILOG_FAILURE",
+        "EPILOG_STOP_FAILURE",
+        "EPILOG_UNDEPLOY_FAILURE",
+        "PROLOG_MIGRATE_POWEROFF",
+        "PROLOG_MIGRATE_POWEROFF_FAILURE",
+        "PROLOG_MIGRATE_SUSPEND",
+        "PROLOG_MIGRATE_SUSPEND_FAILURE",
+        "BOOT_UNDEPLOY_FAILURE",
+        "BOOT_STOPPED_FAILURE",
+        "PROLOG_RESUME_FAILURE",
+        "PROLOG_UNDEPLOY_FAILURE",
+        "DISK_SNAPSHOT_POWEROFF",
+        "DISK_SNAPSHOT_REVERT_POWEROFF",
+        "DISK_SNAPSHOT_DELETE_POWEROFF",
+        "DISK_SNAPSHOT_SUSPENDED",
+        "DISK_SNAPSHOT_REVERT_SUSPENDED",
+        "DISK_SNAPSHOT_DELETE_SUSPENDED",
+        "DISK_SNAPSHOT",
+        "DISK_SNAPSHOT_REVERT",
+        "DISK_SNAPSHOT_DELETE"
     };
 
     public EntityList<Machine> getMachines()
@@ -229,14 +256,13 @@ public class CloudClient {
     
     public Machine createMachine(Integer templateId, String name)
             throws CloudClientException {
-        Machine out = new Machine(this);
         
         Object[] params = new Object[]{
             //auth token
             sessionId,
             //which template to base vm on
             templateId,
-            //name of vm	
+            //name of vm
             name,
             //start normally
             false,
@@ -251,26 +277,7 @@ public class CloudClient {
 
             if(isSuccess){
                 Integer machineId = (Integer) result[1];
-                
-                params = new Object[]{
-                    //auth token
-                    sessionId,
-                    machineId
-                };
-                
-                
-                result = (Object[]) client.execute("one.vm.info", params);
-                
-                Document document = createDocument((String) result[1]);
-                XPath xPath =  XPathFactory.newInstance().newXPath();
-
-                out.setId(Integer.parseInt(xPath.compile("VM/ID").evaluate(document)));
-                out.setName(xPath.compile("VM/NAME").evaluate(document));
-                out.setGroupName(xPath.compile("VM/GNAME").evaluate(document));
-                out.setState(machineStates[Integer.parseInt(xPath.compile("VM/STATE").evaluate(document))]);
-                String ip = xPath.compile("VM/TEMPLATE/CONTEXT/ETH0_IP").evaluate(document);
-                out.setHost(InetAddress.getByName(ip).getHostName());
-    
+                return getMachine(machineId);
             } else if((int) result[2] == 0x0100){
                 throw new AuthenticationException((String) result[1]);
             } else {
@@ -281,8 +288,84 @@ public class CloudClient {
         } catch(Exception e){
             throw new UnexpectedException(e.getMessage());
         }
-        
+    }
+
+    public Machine getMachine(Integer machineId)
+            throws CloudClientException {
+        Machine out = new Machine(this);
+
+        Object[] params = new Object[]{
+            //auth token
+            sessionId,
+            //The object ID
+            machineId
+        };
+
+        try {
+            Object[] result = (Object[]) client.execute("one.vm.info", params);
+
+            boolean isSuccess = (boolean) result[0];
+
+            if(isSuccess){
+                Document document = createDocument((String) result[1]);
+                XPath xPath =  XPathFactory.newInstance().newXPath();
+
+                out.setId(Integer.parseInt(xPath.compile("VM/ID").evaluate(document)));
+                out.setName(xPath.compile("VM/NAME").evaluate(document));
+                out.setGroupName(xPath.compile("VM/GNAME").evaluate(document));
+                out.setState(machineStates[Integer.parseInt(xPath.compile("VM/STATE").evaluate(document))]);
+                String ip = xPath.compile("VM/TEMPLATE/CONTEXT/ETH0_IP").evaluate(document);
+                out.setHost(InetAddress.getByName(ip).getHostName());
+            } else {
+                throw new BadRequestException((String) result[1]);
+            }
+        } catch(CloudClientException e){
+            throw e;
+        } catch(Exception e){
+            throw new UnexpectedException(e.getMessage());
+        }
+
         return out;
+    }
+
+    public void deleteMachine(Integer machineId)
+            throws CloudClientException {
+        Machine machine = getMachine(machineId);
+
+        Object[] params = null;
+
+        if(machine.getState().equals("FAILURE")){
+            params = new Object[]{
+                //auth token
+                sessionId,
+                //the action
+                "delete",
+                //The object ID
+                machineId
+            };
+        } else {
+            params = new Object[]{
+                //auth token
+                sessionId,
+                //the action
+                "shutdown-hard",
+                //The object ID
+                machineId
+            };
+        }
+
+        try {
+            Object[] result = (Object[]) client.execute("one.vm.info", params);
+
+            boolean isSuccess = (boolean) result[0];
+
+            if(!isSuccess){
+                throw new BadRequestException((String) result[1]);
+            }
+        } catch(Exception e){
+            throw new UnexpectedException(e.getMessage());
+        }
+
     }
     
     public EntityList<Template> getTemplates()
@@ -321,6 +404,7 @@ public class CloudClient {
                     template.setMemoryAllocation(Integer.parseInt(xPath.compile("TEMPLATE/MEMORY").evaluate(templateNode)));
                     out.add(template);
                 }
+
                 return out;
             } else if((int) result[2] == 0x0100){
                 throw new AuthenticationException((String) result[1]);
