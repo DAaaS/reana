@@ -63,6 +63,18 @@
       }
     });
 
+    this.deleteMachine = helpers.overload({
+      'number, object': function(machineId, options){
+        return this.delete('machines/' + machineId, {sessionId: this.sessionId()}, options);
+      },
+      'number,  promise': function(machineId, timeout){
+        return this.deleteMachine(machineId, {timeout: timeout});
+      },
+      'number, string': function(machineId){
+        return this.deleteMachine(machineId, {});
+      }
+    });
+
     this.templates = helpers.overload({
       'object': function(options){
         var params = {

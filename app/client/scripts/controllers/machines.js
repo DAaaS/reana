@@ -36,6 +36,12 @@
             });
 	    };
 
+        this.delete = function(machine){
+            if(confirm("Are you really sure you want to delete this machine?")){
+                reana.deleteMachine(machine.id, timeout).then(pollMachines);
+            }
+        };
+
         this.create = function(machine){
             that.machine = machine;
             $uibModal.open({

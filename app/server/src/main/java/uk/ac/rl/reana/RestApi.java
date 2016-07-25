@@ -105,6 +105,21 @@ public class RestApi {
         
     }
     
+    @DELETE
+    @Path("/machines/{machineId}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteMachine(
+            @PathParam("machineId") Integer machineId,
+            @QueryParam("sessionId") String sessionId) {
+        
+        try {
+            return new CloudClient(sessionId).deleteMachine(machineId).toResponse();
+        } catch(CloudClientException e) {
+            return e.toResponse();
+        }
+        
+    }
+    
     
     @GET
     @Path("/templates")

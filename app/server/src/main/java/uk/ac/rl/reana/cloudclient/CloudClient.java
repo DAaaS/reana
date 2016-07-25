@@ -328,10 +328,11 @@ public class CloudClient {
         return out;
     }
 
-    public void deleteMachine(Integer machineId)
+    public Void deleteMachine(Integer machineId)
             throws CloudClientException {
         Machine machine = getMachine(machineId);
-
+        
+        
         Object[] params = null;
 
         if(machine.getState().equals("FAILURE")){
@@ -355,11 +356,13 @@ public class CloudClient {
         }
 
         try {
-            Object[] result = (Object[]) client.execute("one.vm.info", params);
+            Object[] result = (Object[]) client.execute("one.vm.action", params);
 
             boolean isSuccess = (boolean) result[0];
 
-            if(!isSuccess){
+            if(isSuccess){
+                return new Void();
+            } else {
                 throw new BadRequestException((String) result[1]);
             }
         } catch(Exception e){
